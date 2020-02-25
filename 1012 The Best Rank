@@ -1,0 +1,101 @@
+#include<bits/stdc++.h>
+using namespace std;
+class node
+{
+public:
+    node() {
+        numc = numm = nume = numa = 0;
+    }
+    int id, c, m, e, a;
+    int numc, numm, nume, numa;
+}a[10000];
+int n, m;
+bool cmpc(node i, node j)
+{
+    return i.c > j.c;
+}
+bool cmpm(node i, node j)
+{
+    return i.m > j.m;
+}
+bool cmpe(node i, node j)
+{
+    return i.e > j.e;
+}
+bool cmpa(node i, node j)
+{
+    return i.a > j.a;
+}
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+    {
+        int t1, t2, t3, t4, t5;
+        cin >> t1 >> t2 >> t3 >> t4;
+        t5 = (t2 + t3 + t4) / 3;
+        a[i].id = t1;
+        a[i].c = t2;
+        a[i].m = t3;
+        a[i].e = t4;
+        a[i].a = t5;
+    }
+    sort(a, a + n, cmpe);
+    for (int i = 1; i < n; i++)
+        if (a[i].e == a[i - 1].e)
+            a[i].nume = i - 1;
+        else
+            a[i].nume = i;
+    sort(a, a + n, cmpm);
+    for (int i = 1; i < n; i++)
+        if (a[i].m == a[i - 1].m)
+            a[i].numm = i - 1;
+        else
+            a[i].numm = i;
+    sort(a, a + n, cmpc);
+    for (int i = 1; i < n; i++)
+        if (a[i].c == a[i - 1].c)
+            a[i].numc = i - 1;
+        else
+            a[i].numc = i;
+    sort(a, a + n, cmpa);
+    for (int i = 1; i < n; i++)
+        if (a[i].a == a[i - 1].a)
+            a[i].numa = i - 1;
+        else
+            a[i].numa = i;
+    for (int i = 0; i < m; i++)
+    {
+        int temp, flag = 0, minn;
+        char ch = 'E';
+        cin >> temp;
+        for (int j = 0; j < n; j++)
+        {
+            if (a[j].id == temp)
+            {
+                minn = a[j].nume;
+                if (a[j].nume >= a[j].numm)
+                {
+                    minn = a[j].numm;
+                    ch = 'M';
+                }
+                if (a[j].numc <= minn)
+                {
+                    minn = a[j].numc;
+                    ch = 'C';
+                }
+                if (a[j].numa <= minn)
+                {
+                    minn = a[j].numa;
+                    ch = 'A';
+                }
+                cout << minn + 1 << " " << ch << endl;
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 0)
+            cout << "N/A" << endl;
+    }
+    return 0;
+}

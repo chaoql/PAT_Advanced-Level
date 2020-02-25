@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, id;
+map<string, set<int>> title, author, key_word, publisher, year;
+void print()
+{
+	string str;
+	getline(cin, str);
+	title[str].insert(id);
+	getline(cin, str);
+	author[str].insert(id);
+	while (cin >> str)
+	{
+		key_word[str].insert(id);
+		if (getchar() == '\n')
+			break;
+	}
+	getline(cin, str);
+	publisher[str].insert(id);
+	getline(cin, str);
+	year[str].insert(id);
+}
+void ans(map<string, set<int>>& a, string& str, int& num)
+{
+	cout << num << ": " << str << endl;
+	if (a.find(str) != a.end())
+		for (set<int>::iterator it = a[str].begin(); it != a[str].end(); it++)
+			printf("%07d\n", *it);
+	else
+		cout << "Not Found" << endl;
+}
+int main()
+{
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%d\n", &id);
+		print();
+	}
+	cin >> m;
+	for (int i = 0; i < m; i++)
+	{
+		int temp;
+		string str;
+		scanf("%d: ", &temp);
+		switch(temp)
+		{
+		case 1: getline(cin, str); ans(title, str, temp); break;
+		case 2: getline(cin, str); ans(author, str, temp); break;
+		case 3: getline(cin, str); ans(key_word, str, temp); break;
+		case 4: getline(cin, str); ans(publisher, str, temp); break;
+		case 5: getline(cin, str); ans(year, str, temp); break;
+		}
+	}
+	return 0;
+}

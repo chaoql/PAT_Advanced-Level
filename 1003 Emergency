@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define INF 0x3f3f3f
+int n, m, c1, c2, vel[100000], head[100000], cnt, dis[100000], num[100000], vis[100000], bj[100000], minn, sum;
+queue<int> a;
+class node
+{
+public:
+    int to, next, w;
+
+}edge[100000];
+void add(int u, int v, int w)
+{
+    edge[++cnt].w = w;
+    edge[cnt].to = v;
+    edge[cnt].next = head[u];
+    head[u] = cnt;
+}
+void SPFA()
+{
+    for (int i = 0; i < n; i++)
+    {
+        dis[i] = INF;
+        num[i] = 0;
+    }
+    a.push(c1);
+    dis[c1] = 0;
+    vis[c1] = 1;
+    num[c1] = vel[c1];
+    while (!a.empty())
+    {
+        for (int i = head[a.front()]; i; i = edge[i].next)
+        {
+            if (dis[a.front()] + edge[i].w == minn)
+                sum++;
+            if (dis[edge[i].to] > dis[a.front()] + edge[i].w || (dis[edge[i].to] == dis[a.front()] + edge[i].w && num[edge[i].to] < num[a.front()] + vel[edge[i].to]))
+            {
+                dis[edge[i].to] = dis[a.front()] + edge[i].w;
+                num[edge[i].to] = num[a.front()] + vel[edge[i].to];
+                if (!vis[edge[i].to])
+                {
+                    a.push(edge[i].to);
+                    vis[edge[i].to] = 1;
+                }
+            }
+        }
+        vis[a.front()] = 0;
+        a.pop();
+    }
+}
+
+void dfs(int cur, int summ)
+{
+    if (cur == c2)
+    {
+        if (summ == dis[c2])
+            sum++;
+        return;
+    }
+    for (int i = head[cur]; i; i = edge[i].next)
+    {
+        if (!bj[edge[i].to])
+        {
+            bj[edge[i].to] = 1;
+            dfs(edge[i].to, summ + edge[i].w);
+            bj[edge[i].to] = 0;
+        }
+    }
+}
+int main()
+{
+    cin >> n >> m >> c1 >> c2;
+    for (int i = 0; i < n; i++)
+        cin >> vel[i];
+    for (int i = 0; i < m; i++)
+    {
+        int u, v, w;
+        cin >> u >> v >> w;
+        add(u, v, w);
+        add(v, u, w);
+    }
+    SPFA();
+    dfs(c1, 0);
+    cout << sum << " " << num[c2];
+    return 0;
+}

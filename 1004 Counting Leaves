@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, cnt = 1, f[10000];
+vector<int> a[1000];
+void dfs(int b, int floor)
+{
+    cnt = max(cnt, floor);
+    if (!a[b].size())
+        f[floor]++;
+    for (int i = 0; i < a[b].size(); i++)
+        dfs(a[b][i], floor + 1);
+}
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < m; i++)
+    {
+        int id, k;
+        cin >> id >> k;
+        for (int i = 0; i < k; i++)
+        {
+            int temp;
+            cin >> temp;
+            a[id].push_back(temp);
+        }
+    }
+    dfs(1, 1);
+    for (int i = 1; i <= cnt; i++)
+        cout << f[i] << (i == cnt ? "\n" : " ");
+    return 0;
+}

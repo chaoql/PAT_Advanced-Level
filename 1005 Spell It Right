@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+using namespace std;
+string str;
+int sum;
+stack<int>a; 
+string s[10] = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+int main()
+{
+    cin >> str;
+    for (int i = 0; i < str.size(); i++)
+        sum += (str[i] - '0');
+    string r = to_string(sum);
+    for (int i = 0; i < r.size(); i++)
+        cout << s[r[i] - '0'] << (i == r.size() - 1 ? "\n" : " ");
+    return 0;
+}

@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, k, s, head[10000], cnt, vis[10000];
+int beginn, endd;//模拟队头队尾
+int mn[100000000];//模拟队列
+class node
+{
+public:
+    int to, next;
+}a[10000];
+void add(int u, int v)
+{
+    a[++cnt].to = v;
+    a[cnt].next = head[u];
+    head[u] = cnt;
+}
+void connect()
+{
+    memset(vis, 0, sizeof(vis));
+    memset(mn, 0, sizeof(mn));
+    int num = 1, ans = 0;
+    cin >> s;
+    for (int i = 1; i <= n; i++)
+    {
+        if (vis[i] == 0 && i != s)
+        {
+            num++;
+            vis[a[i].to] = 1;
+            mn[endd++] = i;
+            while (beginn!=endd)
+            {
+                for (int j = head[mn[beginn]]; j; j = a[j].next)
+                    if (vis[a[j].to] == 0 && a[j].to != s)
+                    {
+                        vis[a[j].to] = 1;
+                        mn[endd++]=a[j].to;
+                        num++;
+                    }
+                beginn++;
+            }
+            ans++;
+        }
+        if (num == n)
+            break;
+    }
+    cout << ans-1 << endl;
+}
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin >> n >> m >> k;
+    for (int i = 0; i < m; i++)
+    {
+        int t1, t2;
+        cin >> t1 >> t2;
+        add(t1, t2);
+        add(t2, t1);
+    }
+    for (int i = 0; i < k; i++)
+        connect();
+    return 0;
+}

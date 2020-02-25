@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n1, n2, num, max1, max2;
+float a[2010], b[2010], ans[2010];
+int main()
+{
+    cin >> n1;
+    for (int i = 0; i < n1; i++)
+    {
+        int j;
+        float k;
+        cin >> j >> k;
+        a[j] += k;
+        max1 = max(max1, j);
+    }
+    cin >> n2;
+    for (int i = 0; i < n2; i++)
+    {
+        int j;
+        float k;
+        cin >> j >> k;
+        b[j] += k;
+        max2 = max(max2, j);
+    }
+    for (int i = 0; i <= max1; i++)
+        for (int j = 0; j <= max2; j++)
+            ans[i + j] += a[i] * b[j];
+    for (int i = 0; i <= (max1 + max2); i++)
+        if (ans[i] != 0)
+            num++;
+    cout << num << " ";
+    for (int i = (max1 + max2); i >= 0 && num > 0; i--)
+    {
+        if (ans[i])
+        {
+            num--;
+            printf("%d %.1f", i, ans[i]);
+            cout << (num == 0 ? "\n" : " ");
+        }
+    }
+    return 0;
+}

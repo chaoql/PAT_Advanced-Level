@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+string str;
+int s[100], vis[20], num, dou[20];
+int cnt, temp;
+void toN()
+{
+	for (int i = str.size() - 1; i >= 0; i--)
+	{
+		vis[str[i] - '0']++;
+		s[cnt++] = 2 * (str[i] - '0');
+	}
+	for (int i = 0; i <= cnt; i++)
+	{
+		s[i] += temp;
+		temp = s[i] / 10;
+		s[i] = s[i] % 10;
+		dou[s[i]]++;
+	}
+	num = cnt;
+	if (s[cnt] != 0)
+		num += 1;
+}
+bool judge()
+{
+	if (num != cnt)
+		return 0;
+	for (int i = 1; i <= 9; i++)
+		if (dou[i] != vis[i])
+			return 0;
+	return 1;
+}
+int main()
+{
+	cin >> str;
+	toN();
+	if (judge())
+		cout << "Yes" << endl;
+	else
+		cout << "No" << endl;
+	for (int i = num - 1; i >= 0; i--)
+		cout << s[i];
+	return 0;
+}

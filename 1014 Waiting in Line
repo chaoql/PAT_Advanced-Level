@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, k, q, cnt;
+class node
+{
+public:
+    node(){
+        flag = 0;
+    }
+    int time, value, flag = 0;
+}a[1010];
+vector<vector<int> >v;
+void full()
+{
+    for (int j = 1; j <= m; j++)
+        for (int i = 1; i <= n; i++)
+            if (cnt < k && v[i].size() <= m)
+                v[i].push_back(++cnt);
+}
+bool judge()
+{
+    for (int i = 1; i <= n; i++)
+        if (v[i].size() > 1)
+            return true;
+    return false;
+}
+int main()
+{
+    cin >> n >> m >> k >> q;//窗口数，预备区人数，总人数，问题数
+    for (int i = 1; i <= k; i++)
+        cin >> a[i].value;
+    int temp;
+    v.resize(n + 1);
+    for (int i = 1; i <= n; i++)
+        v[i].push_back(temp);
+    full();
+    for (int i = 1; judge(); i++)//时间流逝
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (i == 539)
+                i = i;
+            if (v[j].size() > 1)
+            {
+                if(i<=540)
+                    a[v[j][1]].flag = 1;
+                if (a[v[j][1]].flag == 1)
+                {
+                    a[v[j][1]].value--;
+                    if (a[v[j][1]].value == 0)
+                    {
+                        a[v[j][1]].time += i;
+                        v[j].erase(v[j].begin() + 1);
+                    }
+                }
+                else
+                    v[j].erase(v[j].begin() + 1);
+            }
+        }
+        full();
+    }
+    for (int i = 1; i <= q; i++)
+    {
+        int temp;
+        cin >> temp;
+        if (a[temp].flag)
+            printf("%02d:%02d\n", a[temp].time / 60 + 8, a[temp].time % 60);
+        else
+            cout << "Sorry" << endl;
+    }
+    return 0;
+}

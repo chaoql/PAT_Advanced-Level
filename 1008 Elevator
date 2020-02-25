@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, now, num, ans;
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> num;
+        if (num > now)
+            ans += 6 * (num - now);
+        else if (now > num)
+            ans += 4 * (now - num);
+        ans += 5;
+        now = num;
+    }
+    cout << ans;
+    return 0;
+}

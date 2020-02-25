@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 0x3f3f3f
+int Cmax, N, Sp, M, cnt, vel[10000], head[10000], mind = MAX, mins = MAX, bj[10000], minv = MAX, anss;
+vector<int>vis, road;
+class node
+{
+public:
+	int to, next, w;
+}edge[10000];
+void add(int u, int v, int w)
+{
+	edge[++cnt].w = w;
+	edge[cnt].to = v;
+	edge[cnt].next = head[u];
+	head[u] = cnt;
+}
+void dfs(int cur, int nums, int numd, int v)//nums-送出去的；numd-带回的
+{
+	if (cur == Sp)
+	{
+		if (v < minv || (v == minv && anss < mins) || (v == minv && mins == anss && numd < mind))
+		{
+			road.clear();
+			for (int i = 0; i < vis.size(); i++)
+				road.push_back(vis[i]);
+			minv = v;
+			mins = anss;
+			mind = numd;
+		}
+		return;
+	}
+	for (int i = head[cur]; i; i = edge[i].next)
+	{
+		if (bj[edge[i].to] == 0)
+		{
+			bj[edge[i].to] = 1;
+			vis.push_back(edge[i].to);
+			if (vel[edge[i].to] > (Cmax / 2))//需要带走一部分
+				dfs(edge[i].to, 0, numd + vel[edge[i].to] - (Cmax / 2), v + edge[i].w);
+			else//需要送出一部分
+				if (((Cmax / 2) - vel[edge[i].to]) <= numd)//带走的可以完全抵掉送出的
+					dfs(edge[i].to, 0, numd - ((Cmax / 2) - vel[edge[i].to]), v + edge[i].w);
+				else//要送出的可以被带走的抵一部分
+				{
+					anss += ((Cmax / 2) - vel[edge[i].to] - numd);
+					dfs(edge[i].to, 0, 0, v + edge[i].w);
+					anss -= ((Cmax / 2) - vel[edge[i].to] - numd);//回溯
+				}
+			bj[edge[i].to] = 0;//回溯
+			vis.pop_back();//回溯
+		}
+	}
+}
+int main()
+{
+	cin >> Cmax >> N >> Sp >> M;
+	for (int i = 1; i <= N; i++)
+		cin >> vel[i];
+	for (int i = 1; i <= M; i++)
+	{
+		int t1, t2, t3;
+		cin >> t1 >> t2 >> t3;
+		add(t1, t2, t3);
+		add(t2, t1, t3);
+	}
+	dfs(0, 0, 0, 0);
+	cout << mins << " " << "0->";
+	for (int i = 0; i < road.size(); i++)
+		cout << road[i] << (i == road.size() - 1 ? " " : "->");
+	cout << mind;
+	return 0;
+}
+

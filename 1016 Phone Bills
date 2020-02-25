@@ -1,0 +1,101 @@
+#include<bits/stdc++.h>
+using namespace std;
+int money[25], to_money[25], n, month, cnt;
+float num;
+class node
+{
+public:
+	string name;
+	bool line, flag = 0;
+	int b_day, b_time1, b_time2, e_day, e_time1, e_time2;
+}a[10000], b[10000];
+bool cmp(node a, node b)//快排
+{
+	if (a.name != b.name)
+		return a.name < b.name;
+	else if (a.b_day != b.b_day)
+		return a.b_day < b.b_day;
+	else if (a.b_time1 != b.b_time1)
+		return a.b_time1 < b.b_time1;
+	else
+		return a.b_time2 < b.b_time2;
+}
+int main()
+{
+	for (int i = 1; i <= 24; i++)
+		cin >> money[i];
+	for (int i = 1; i <= 24; i++)
+		to_money[i] = i * 60;
+	cin >> n;
+	for (int i = 0; i < n; i++)//录入数据
+	{
+		string temp, names, lines;
+		cin >> names >> temp >> lines;
+		a[i].name = names;
+		month = (temp[0] - '0') * 10 + temp[1] - '0';
+		a[i].b_day = (temp[3] - '0') * 10 + temp[4] - '0';
+		a[i].b_time1 = (temp[6] - '0') * 10 + temp[7] - '0';
+		a[i].b_time2 = (temp[9] - '0') * 10 + temp[10] - '0';
+		a[i].line = (lines[1] == 'n' ? 1 : 0);
+	}
+	sort(a, a + n, cmp);
+	for (int i = 0; i < n - 1; i++)//配对
+		if (a[i + 1].name == a[i].name && a[i + 1].line == 0 && a[i + 1].flag == 0 && a[i].line == 1 && a[i].flag == 0)
+		{
+			a[i].e_day = a[i + 1].b_day;
+			a[i].e_time1 = a[i + 1].b_time1;
+			a[i].e_time2 = a[i + 1].b_time2;
+			a[i + 1].flag = 1;
+			a[i].flag = 1;
+			b[cnt++] = a[i];
+		}
+	for (int i = 0; i < cnt; i++)//输出
+	{
+		float sum = 0;
+		int temp1 = 0, temp2 = 0;
+		int f = 0, s = 0;
+		if ((i != 0 && b[i].name != b[i - 1].name) || i == 0)
+		{
+			cout << b[i].name << " ";
+			printf("%02d\n", month);
+		}
+		printf("%02d:%02d:%02d ", b[i].b_day, b[i].b_time1, b[i].b_time2);
+		printf("%02d:%02d:%02d ", b[i].e_day, b[i].e_time1, b[i].e_time2);
+		cout << -((b[i].b_day - b[i].e_day) * 24 * 60 + (b[i].b_time1 - b[i].e_time1) * 60 + b[i].b_time2 - b[i].e_time2) << " ";
+		temp1 = b[i].b_time1 * 60 + b[i].b_time2;
+		temp2 = b[i].e_time1 * 60 + b[i].e_time2;
+		for (int i = 1; i <= 24; i++)
+			if (to_money[i] >= temp1)
+			{
+				f = i;
+				break;
+			}
+		for (int j = f; j <= 24; j++)
+		{
+			if (b[i].b_day < b[i].e_day)
+				s = to_money[j] - temp1;
+			if (b[i].b_day == b[i].e_day)
+				s = min(to_money[j] - temp1, temp2 - temp1);
+			sum += s * money[j] * 0.01;
+			temp1 += s;
+			if (temp1 == temp2 && b[i].b_day == b[i].e_day)
+				break;
+			if (b[i].b_day < b[i].e_day && j == 24)
+			{
+				b[i].b_day++;
+				temp1 = 0;
+				j = 0;
+			}
+		}
+		cout << "$";
+		printf("%.2f\n", sum);
+		num += sum;
+		if ((i < cnt - 1 && b[i].name != b[i + 1].name) || i == cnt - 1)
+		{
+			cout << "Total amount: $";
+			printf("%.2f\n", num);
+			num = 0;
+		}
+	}
+	return 0;
+}

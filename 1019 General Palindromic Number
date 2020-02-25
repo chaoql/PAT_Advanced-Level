@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a, b;
+vector<int> v;
+int main()
+{
+	cin >> a >> b;
+	while (a > 0)
+	{
+		v.push_back(a % b);
+		a /= b;
+	}
+	for (int i = 0; i < v.size() / 2; i++)
+		if (v[i] != v[v.size() - 1 - i])
+		{
+			cout << "No" << endl;
+			for (int j = v.size() - 1; j >= 0; j--)
+				cout << v[j] << (j == 0 ? "\n" : " ");
+			return 0;
+		}
+	cout << "Yes" << endl;
+	for (int j = v.size() - 1; j >= 0; j--)
+		cout << v[j] << (j == 0 ? "\n" : " ");
+	return 0;
+}

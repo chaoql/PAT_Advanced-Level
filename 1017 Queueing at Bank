@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, w, b[10000], cnt, c;
+float num;
+class node
+{
+public:
+	int time, sum;
+}a[10100];
+bool cmp(node a, node b){
+	return a.sum < b.sum;
+}
+int main()
+{
+	cin >> n >> w;
+	for (int i = 1; i <= n; i++)
+	{
+		int hh, mm, ss, p, time;
+		scanf("%d:%d:%d %d", &hh, &mm, &ss, &p);
+		time = hh * 3600 + mm * 60 + ss;
+		if (time > 17 * 3600)
+			continue;
+		a[++c].sum = time;
+		a[c].time = min(60, p) * 60;
+	}
+	sort(a + 1, a + 1 + c, cmp);
+	for (int i = 1; i <= w; i++)
+		b[i] = 8 * 60 * 60;
+	for (int  j= 1; j <= c; j++)
+	{
+		int minn = 1;
+		for (int i = 2; i <= w; i++)
+			if (b[minn] > b[i])
+				minn = i;
+		if (b[minn] > a[j].sum)
+		{
+			num += b[minn] - a[j].sum;
+			b[minn] += a[j].time;
+		}
+		else
+			b[minn] = a[j].time + a[j].sum;
+	}
+	printf("%.1f", num / 60.0 / c);
+	return 0;
+}

@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, head[10010], cnt, vis[10010], num, maxd, bj[10010];
+set<int> s, ns;
+struct node
+{
+	int to, next;
+}edge[100010];
+void add(int u, int v)
+{
+	edge[++cnt].to = v;
+	edge[cnt].next = head[u];
+	head[u] = cnt;
+}
+void dfs(int cur, int deep)
+{
+	vis[cur] = 1;
+	if (deep > maxd)
+	{
+		maxd = deep;
+		s.clear();
+		s.insert(cur);
+	}
+	else if (deep == maxd)
+		s.insert(cur);
+	for (int i = head[cur]; i; i = edge[i].next)
+		if (!vis[edge[i].to])
+			dfs(edge[i].to, deep + 1);
+}
+int main()
+{
+	ios::sync_with_stdio(false);
+    cout.tie(nullptr);
+	cin >> n;
+	for (int i = 1; i < n; i++)
+	{
+		int t1, t2;
+		cin >> t1 >> t2;
+		add(t1, t2);
+		add(t2, t1);
+	}
+	for (int i = 1; i <= n; i++)
+		if (!vis[i])
+		{
+			dfs(i, 1);
+			num++;
+		}
+	if (num != 1)
+		cout << "Error: " << num << " components";
+	else
+	{
+		ns = s;
+		s.clear();
+		memset(vis, 0, sizeof(vis));
+		dfs(*ns.begin(), 1);
+		for (set<int>::iterator i = s.begin(); i != s.end(); i++)
+			ns.insert(*i);
+		for (set<int>::iterator i = ns.begin(); i != ns.end(); i++)
+			cout << *i << endl;
+	}
+	return 0;
+}

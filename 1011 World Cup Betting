@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+#include<unordered_map>
+using namespace std;
+int cnt;
+float a[100000];
+char s[3] = { 'W', 'T', 'L' };
+vector<float>b;
+int main()
+{
+    while (cin >> a[cnt++]);
+    int flag = cnt / 3;
+    for (int i = 0; i < flag; i++)
+    {
+        int maxx = 0;
+        float maxy = 0.0;
+        for (int j = 0; j < 3; j++)
+            if (maxy < a[i * 3 + j])
+            {
+                maxx = j;
+                maxy = a[i * 3 + j];
+            }
+        b.push_back(maxy);
+        cout << s[maxx]<<" ";
+    }
+    float sum = 1.0;
+    for (float i : b)
+        sum *= i;
+    printf("%.2f", (sum * 0.65 - 1) * 2);
+    return 0;
+}
